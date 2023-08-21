@@ -1,0 +1,17 @@
+@use "colors";
+@use "fonts";
+
+body {
+    background-color: colors.$light;
+    color: colors.$dark;
+    font-family: fonts.$primary;
+}
+
+#site-container {
+    min-height: calc(100vh - 50px);
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
