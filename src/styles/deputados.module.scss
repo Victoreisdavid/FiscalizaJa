@@ -1,0 +1,68 @@
+@use "colors";
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .dep {
+        display: flex;
+
+        text-align: left;
+
+        width: 40%;
+        height: 150px;
+
+
+        margin: 8px auto 8px auto;
+        padding: 15px;
+        
+        box-shadow: 0px 0px 2px colors.$dark;
+        border-radius: 5px;
+
+        text-decoration: none;
+        color: colors.$dark;
+
+        .text {
+            margin-left: 24px;
+        }
+
+        h1 {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        p {
+            font-size: 1.3em !important;
+        }
+
+        @media screen and (max-width: 1300px) {
+            width: 60%;
+        }
+
+        @media screen and (max-width: 900px) {
+            width: 70%;
+        }
+
+        @media screen and (max-width: 700px) {
+            width: 95%;
+        }
+
+        @media screen and (max-width: 530px) {
+            height: 300px;
+
+            flex-direction: column-reverse;
+
+            .text {
+                margin: auto;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                
+                width: fit-content;
+
+            }
+        }
+    }
+}

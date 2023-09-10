@@ -1,0 +1,17 @@
+@use "colors";
+
+.loader {
+    border: 8px solid colors.$mid;
+    border-top: 8px solid colors.$dark;
+    border-left: 8px solid colors.$dark;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,11 @@
+@use "colors";
+
+#nav {
+    position: absolute;
+    left: 2.3rem;
+
+    a {
+        text-decoration: none;
+        color: colors.$gray;
+    }
+}

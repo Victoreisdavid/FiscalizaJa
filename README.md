@@ -1,11 +1,50 @@
-# FiscalizaJá
-Você está preparado para ter acesso a informações que poucos têm coragem de mostrar?
+# Fiscaliza Já!
+Fiscaliza Já é um website (talvez em um futuro, um aplicativo para celular) que mostra despesas dos deputados da câmara.
 
-FiscalizaJá é uma plataforma que nasceu com objetivo de possibilitar acesso de toda a população brasileira aos gastos dos deputados que estão nos representando.
+O projeto faz consumo da API dos [Dados Abertos](https://dadosabertos.camara.leg.br/) que apesar de dizer que os dados podem ser consumidos por qualquer um, não ativaram o CORS, o que impede desenvolvedores de consumir diretamente a API em seus websites (eu precisei fazer um proxy no backend para esse projeto!). Espero que apenas tenham esquecido (ou talvez não saibam) do CORS.
 
-Por mais que todas essas informações sejam públicas, o acesso a elas não é fácil! Não chega em todos e ninguém está fazendo questão que chegue, eu quero mudar isso! Meu objetivo é veicular esses dados ao fácil acesso de qualquer pessoa, sem segredos, sem dificuldades, sem omissões!
+Caso você queira saber como usar a API dos dados abertos, aqui está o link da documentação:
 
-# Estou correndo riscos!
-No país em que vivemos, algo como o FiscalizaJá é um ato de coragem, é triste afirmar isso, mas é verdade!
+https://dadosabertos.camara.leg.br/swagger/api.html
 
-Existem outros projetos como esse que sofreram retaliação por parte de deputados de dentro da câmara, porque há tanto medo que esses dados cheguem ás telas dos brasileiros? Porquê??
+## 👀 Quando a ideia surgiu
+Bom, tive a ideia de desenvolver isso quando li sobre o Brasiliapp no [TabNews](https://www.tabnews.com.br/MrRayzor/o-brasiliapp-acabou) (que foi descontinuado porque o desenvolvedor recebeu uma **ameaça de morte** em seu email, mais detalhes: https://brasiliapp.com.br/), achei interessante a ideia dele e resolvi desenvolver algo apartir dos dados abertos, e aqui está o Fiscaliza Já!
+
+Eu sei que o projeto está bem "cru" ainda, há muitas coisas que estou desenvolvendo, e há algumas refatorações que farei no código para ficar mais limpo e fácil de dar manutenção.
+
+Essa é a primeira versão, é uma versão beta e pode haver bugs.
+
+# 🚀 SelfHost
+Aqui está o guia para você hospedar esse projeto você mesmo!
+
+Requisitos:
+
+- Node 16 pra cima
+- Paciência
+
+## Configure a .env
+
+Crie um arquivo `.env` no diretório principal, e coloque o seguinte
+
+```
+NEXT_PUBLIC_API_URL="URL"
+```
+
+Subsititua "URL" pela URL do seu website, dessa forma:
+`https://website.example/api`.
+
+🤔 Porque dessa forma???
+
+Porque meu plano inicial era simplesmente consumir a API dos Dados Abertos, mas no meio do projeto eu descobri QUE OS CARAS NÃO ATIVARAM O CORS!!!!!!!!! e isso me frustrou bastante porque eu não queria fazer um backend, tentei muitas soluções alternativas porém...
+
+precisei fazer um backend para usar como proxy 🤡
+
+Passos:
+- Instale as dependências: `npm install`.
+- Faça build das páginas: `npm run build`.
+- Inicie o Next em produção: `npm run start`.
+- Está fazendo alterações? Use o modo de desenvolvimento: `npm run dev`.
+
+É simples hospedar o projeto, você não vai ter muitas dificuldades!
+
+E claro, lembrando que eu sou um desenvolvedor iniciante de 17 anos (nem sou adulto ainda), não espere um trabalho super profissional por aqui, mas eu me dediquei.

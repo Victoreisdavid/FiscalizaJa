@@ -1,0 +1,117 @@
+@use "colors";
+
+#header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    padding-bottom: 30vh !important;
+
+    padding: 8px;
+
+    h1 {
+        font-size: 3.3em
+    }
+
+    p {
+        font-size: 1.5em;
+
+        margin: 5px 0px 5px 0px;
+    }
+
+    #text {
+        width: 40%;
+
+        @media screen and (max-width: 830px) {
+            width: 60%;
+            margin: auto;
+            padding-top: 5rem;
+            margin-bottom: -5rem;
+        }
+    }
+
+    @media screen and (max-width: 830px) {
+        flex-direction: column;
+
+        #icon {
+            display: none;
+        }
+    }
+
+    #button {
+        display: block;
+        
+        width: fit-content;
+        margin: 24px 0px 0px 0px;
+
+        text-align: center;
+        text-decoration: none;
+        font-size: 1.3em;
+        font-weight: bold;
+
+        cursor: pointer;
+
+        color: colors.$light;
+        background-color: colors.$primary;
+        box-shadow: 0px 0px 10px colors.$primary;
+
+        border-radius: 5px;
+        padding: 12px 24px
+    }
+}
+
+#main {
+    text-align: center;
+
+    h1 {
+        font-size: 2.2em
+    }
+
+    p {
+        font-size: 1.5em;
+
+        margin: 5px 0px 5px 0px;
+    }
+
+    #search {
+        display: block;
+        margin: 24px auto 24px auto;
+        padding: 12px 24px;
+        width: 350px;
+
+        background-color: colors.$mid;
+        box-shadow: 0px 0px 1px colors.$dark;
+
+        border: none;
+        border-radius: 8px;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    #page_selector {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+
+        button {
+            display: block;
+            
+            background-color: colors.$dark;
+            color: colors.$light;
+
+            padding: 5px 8px;
+            padding-top: 8px;
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            border: none;
+        }
+
+        margin-bottom: 2.5vh;
+    }
+}
