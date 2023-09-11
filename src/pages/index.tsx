@@ -76,6 +76,10 @@ export default function HomePage() {
                 <div id="anchor" />
                 <h1>O que você procura?</h1>
                 <input id={style.search} type="text" placeholder="Kim Kataguiri" />
+                { deputados && <Deputados deputados={deputados} /> }
+                <br />
+                { deputados?.length == 0 && <Loading /> }
+                <br />
                 <div id={style.page_selector}>
                     <button onClick={() => {
                         if(!isSearch) {
@@ -89,9 +93,6 @@ export default function HomePage() {
                     }} style={{ opacity: isSearch ? 0.5 : 1 }}><ArrowRightSquare size={30} /></button>
                 </div>
                 <span>Página {page}</span>
-                { deputados && <Deputados deputados={deputados} /> }
-                <br />
-                { deputados?.length == 0 && <Loading /> }
             </main>
             <br />
         </>

@@ -28,12 +28,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const deputado = await serverApi.obter_deputado(id)
 
     const uriPartido = deputado.ultimoStatus.uriPartido.split("/")
-
     const idPartido = Number(uriPartido[uriPartido.length - 1])
-
     const partido = await serverApi.obter_partido(idPartido)
-
-    console.log(partido)
 
     if(!deputado) {
         return {
@@ -93,6 +89,18 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido }
                 <section hidden={section !== "despesas"}>
                     <br />
                     <h2>Despesas</h2>
+                    <div className={style.cards}>
+                        {despesas && despesas.map(((despesa, i) => (
+                            <div key={i}>
+                                <h1>{despesa.cnpjCpfFornecedor.length === 11 ? <User2 size={34} style={{ verticalAlign: "-8px" }} /> : <Building2 size={34} style={{ verticalAlign: "-8px" }} /> } {despesa.nomeFornecedor}</h1>
+                                <p><Tag size={30} style={{ verticalAlign: "-9px" }} /> {despesa.cnpjCpfFornecedor.length < 1 ? "N/A" : despesa.cnpjCpfFornecedor.length === 11 ? despesa.cnpjCpfFornecedor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4") : despesa.cnpjCpfFornecedor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')}</p>
+                                <p><DollarSign size={30} style={{ verticalAlign: "-9px" }} /> R$ {despesa.valorLiquido}</p>
+                                <p><CalendarRange size={30} style={{ verticalAlign: "-8px" }} /> {new Date(despesa.dataDocumento).toLocaleDateString()}</p>
+                                <p><FileSearch size={30} style={{ verticalAlign: "-8px" }} /> <a href={despesa.urlDocumento || "#"} target="_blank">Documento/comprovante</a></p>
+                            </div>
+                        )))}
+                    </div>
+                    <br />
                     <div id={style.page_selector}>
                         <button onClick={() => { 
                             setPage(page > 1 ? page - 1 : page)    
@@ -102,18 +110,6 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido }
                         }}><ArrowRightSquare size={30} /></button>
                     </div>
                     <div style={{ textAlign: "center" }}>Página {page}</div>
-                    <br />
-                    <div className={style.cards}>
-                        {despesas && despesas.map(((despesa, i) => (
-                            <div key={i}>
-                                <h1><Building2 size={34} style={{ verticalAlign: "-8px" }} /> {despesa.nomeFornecedor}</h1>
-                                <p><Tag size={30} style={{ verticalAlign: "-9px" }} /> {despesa.cnpjCpfFornecedor.length < 1 ? "N/A" : despesa.cnpjCpfFornecedor.length === 11 ? despesa.cnpjCpfFornecedor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4") : despesa.cnpjCpfFornecedor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')}</p>
-                                <p><DollarSign size={30} style={{ verticalAlign: "-9px" }} /> R$ {despesa.valorLiquido}</p>
-                                <p><CalendarRange size={30} style={{ verticalAlign: "-8px" }} /> {new Date(despesa.dataDocumento).toLocaleDateString()}</p>
-                                <p><FileSearch size={30} style={{ verticalAlign: "-8px" }} /> <a href={despesa.urlDocumento || "#"} target="_blank">Documento/comprovante</a></p>
-                            </div>
-                        )))}
-                    </div>
                 </section>
                 <section hidden={section !== "info"}>
                     <br />
