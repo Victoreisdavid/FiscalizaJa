@@ -9,7 +9,7 @@ import { GetServerSidePropsContext } from "next";
 import { Deputado, Despesa } from "../interfaces/Deputado";
 import { Partido } from "../interfaces/Partido";
 
-import { CircleDollarSign, UserCircle, Newspaper, Building2, DollarSign, CalendarRange, Tag, FileSearch, User2, Wallet, MapPin, Mail, GraduationCap, ArrowLeftSquare, ArrowRightSquare, Clipboard, UserCheck2, Users2 } from "lucide-react";
+import { CircleDollarSign, UserCircle, Newspaper, Building2, DollarSign, CalendarRange, Tag, FileSearch, User2, Wallet, MapPin, Mail, GraduationCap, ArrowLeftSquare, ArrowRightSquare, Clipboard, UserCheck2, Users2, CalendarDays } from "lucide-react";
 
 import { useState, useEffect } from "react";
 
@@ -25,11 +25,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
-    const deputado = await serverApi.obter_deputado(id)
-
-    const uriPartido = deputado.ultimoStatus.uriPartido.split("/")
-    const idPartido = Number(uriPartido[uriPartido.length - 1])
-    const partido = await serverApi.obter_partido(idPartido)
+    const deputado = await serverApi.obter_deputado(id).catch(() => {
+        return null
+    })
 
     if(!deputado) {
         return {
@@ -37,16 +35,28 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
+    const uriPartido = deputado.ultimoStatus.uriPartido.split("/")
+    const idPartido = Number(uriPartido[uriPartido.length - 1])
+    const partido = await serverApi.obter_partido(idPartido)
+
+    const nascimentoAno = new Date(deputado.dataNascimento).getFullYear()
+    const nascimentoMes = new Date(deputado.dataNascimento).getMonth() + 1
+    const anoAtual = new Date().getFullYear()
+    const mesAtual = new Date().getMonth()
+
+    const idade = anoAtual - nascimentoAno
+
     return {
         props: {
             deputado,
-            partido
+            partido,
+            idade: mesAtual < nascimentoMes ? idade + 1 : idade // Se passou o mês do aniversário, a idade ele tem de ser somada em 1.
         }
     }
 }
 
-export default function Despesas(props: { deputado: Deputado, partido: Partido }) {
-    const { deputado, partido } = props
+export default function Despesas(props: { deputado: Deputado, partido: Partido, idade: number }) {
+    const { deputado, partido, idade } = props
 
     //console.log(deputado)
 
@@ -57,9 +67,15 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido }
     const [page, setPage] = useState<number>(1)
 
     async function load() {
-        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", [], [])
+        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", [], []).catch(() => {
+            return null
+        })
 
-        setDespesas(despesas)
+        if(!despesas) {
+            document.querySelector<HTMLDivElement>(".hidden-warn").style.display = "block"
+        }
+
+        setDespesas(despesas || [])
     }
 
     useEffect(() => {
@@ -118,6 +134,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido }
                         <div>
                             <h1><User2 size={34} style={{ verticalAlign: "-8px" }} />{deputado.nomeCivil}</h1>
                             <p><Wallet size={34} style={{ verticalAlign: "-9px" }} /> {deputado.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}</p>
+                            <p><CalendarDays size={34} style={{ verticalAlign: "-8px" }} /> {idade} anos</p>
                             <p><MapPin size={34}  style={{ verticalAlign: "-9px" }} /> {deputado.municipioNascimento}</p>
                             <p><GraduationCap size={34}  style={{ verticalAlign: "-9px" }} /> {deputado.escolaridade}</p>
                             <p><Mail size={34} style={{ verticalAlign: "-11px" }} /> {deputado.ultimoStatus.email}</p>

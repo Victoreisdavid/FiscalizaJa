@@ -1,0 +1,18 @@
+@use "colors";
+
+#container {
+    position: fixed;
+    top: 0;
+
+    width: 100%;
+    height: auto;
+    padding: 12px;
+
+    background-color: colors.$secondary;
+    color: colors.$light;
+
+    p {
+        text-align: center;
+        font-size: 1.2em;
+    }
+}

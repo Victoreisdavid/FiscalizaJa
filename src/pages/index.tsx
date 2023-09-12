@@ -22,8 +22,12 @@ export default function HomePage() {
     async function load_all() {
         set_deputados([])
         const deputados = await clientApi.obter_deputados(10, page)
+        
+        if(!deputados) {
+            document.querySelector<HTMLDivElement>(".hidden-warn").style.display = "block"
+        }
 
-        set_deputados(deputados)
+        set_deputados(deputados || [])
     }
 
     useEffect(() => {
@@ -45,7 +49,10 @@ export default function HomePage() {
                     setSearch(false)
                     load_all()
                 } else {
-                    const searchRequest = await axios.get(`/api/search?s=${encodeURIComponent(searchbar.value)}`)
+                    const searchRequest = await axios.get(`/api/search?s=${encodeURIComponent(searchbar.value)}`).catch(() => {
+                        document.querySelector<HTMLDivElement>(".hidden-warn").style.display = "block"
+                        return { data: [] }
+                    })
                     set_deputados(searchRequest.data)
                 }
             }, 500)
