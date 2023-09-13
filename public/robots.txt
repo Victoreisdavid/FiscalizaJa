@@ -1,0 +1,5 @@
+User-Agent: *
+
+Allow: /
+
+Sitemap: https://www.fiscalizaja.com/sitemap.xml
