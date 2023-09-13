@@ -2,6 +2,8 @@ import axios, { AxiosInstance } from "axios";
 import type { DeputadoResumo, Deputado, Despesa } from "../interfaces/Deputado";
 import type { Partido } from "../interfaces/Partido";
 
+import { parse } from "url";
+
 class DadosAbertosApi {
 
     public runtime: "browser" | "server"
@@ -64,37 +66,32 @@ class DadosAbertosApi {
      * @param ordenarPor Ordenar com base em qualquer um dos campos do retorno.
      * 
      */
-    async obter_gastos_deputado(id: number, pagina: number, ordenarPor: string = "ano", meses?: number[], anos?: number[], fornecedor: string = undefined): Promise<Despesa[] | null> {
+    async obter_gastos_deputado(id: number, pagina: number, ordenarPor: string = "ano", meses?: number[], ano?: number[], fornecedor: string = undefined, items?: number): Promise<Despesa[] | null> {
         
         const params: {
-            itens: number,
+            itens: number | null,
             pagina: number,
             ordenarPor: string,
             fornecedor?: string,
-            meses?: number[],
-            anos?: number[]
+            mes?: number[] | null,
+            ano?: number[] | null
         } = {
-            itens: 10,
+            itens: items || null,
             pagina,
             ordenarPor,
             fornecedor
         }
 
-        if(meses) {
-            params.meses = meses
+        if(meses && !isNaN(Number(meses))) {
+            params.mes = meses || null
         }
 
-        if(anos) {
-            params.anos = anos
+        if(ano && !isNaN(Number(ano))) {
+            params.ano = ano
         }
 
         const gastos = await this.api.get(`/deputados/${id}/despesas`, {
-            params: {
-                itens: 10,
-                pagina,
-                ordenarPor,
-                fornecedor
-            },
+            params,
             paramsSerializer: {
                 indexes: null
             }
@@ -103,6 +100,60 @@ class DadosAbertosApi {
         //console.log(gastos.data.dados)
     
         return gastos.data.dados
+    }
+
+    /**
+     * # Obter o total de gastos de um deputado em determinado ano.
+     * Essa função retorna o total das despesas do deputado em um determinado ano.
+     * @param id ID do deputado
+     * @param ano Ano das despesas 
+     */
+    async obter_gastos_deputado_ano(id: number, ano: number): Promise<{ total: number, declarado: number }> {
+        const despesas = await this.api.get(`/deputados/${id}/despesas`, {
+            params: {
+                ano,
+                itens: 150
+            }
+        }).catch(() => { return null })
+
+        if(!despesas) {
+            return null
+        }
+
+        let pagina = 1;
+        
+        let last = false
+
+        while(last === false) {
+            const proximas_despesas = await this.api.get(`/deputados/${id}/despesas`, {
+                params: {
+                    ano,
+                    itens: 150,
+                    pagina
+                }
+            }).catch(() => { return null })
+
+            if(!proximas_despesas || !proximas_despesas.data.dados.length) {
+                last = true
+                break;
+            }
+
+            for(const despesa of proximas_despesas.data.dados) {
+                despesas.data.dados.push(despesa)
+            }
+            pagina += 1
+        }
+        
+        let total = 0;
+        
+        for(const despesa of despesas.data.dados) {
+            total += despesa.valorLiquido
+        }
+
+        return {
+            total,
+            declarado: despesas.data.dados.length
+        }
     }
 
     /**

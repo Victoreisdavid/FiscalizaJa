@@ -96,6 +96,39 @@
         }
     }
 
+    #totals_card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+
+        line-height: 1.8rem;
+
+        text-align: center;
+
+        h1 {
+            font-weight: normal;
+            font-size: 1.2em;
+        }
+
+        #total {
+            font-weight: bold;
+            font-size: 1.6em;
+        }
+
+        #declarados {
+            font-size: 1.1em;
+        }
+
+        margin: auto;
+        margin-top: 1.2rem;
+        margin-bottom: 2rem;
+
+        box-shadow: 0px 0px 2px colors.$dark;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+
     #page_selector {
         display: flex;
         justify-content: space-evenly;

@@ -9,7 +9,7 @@ import { GetServerSidePropsContext } from "next";
 import { Deputado, Despesa } from "../interfaces/Deputado";
 import { Partido } from "../interfaces/Partido";
 
-import { CircleDollarSign, UserCircle, Newspaper, Building2, DollarSign, CalendarRange, Tag, FileSearch, User2, Wallet, MapPin, Mail, GraduationCap, ArrowLeftSquare, ArrowRightSquare, Clipboard, UserCheck2, Users2, CalendarDays } from "lucide-react";
+import { CircleDollarSign, UserCircle, Newspaper, Building2, DollarSign, CalendarRange, Tag, FileSearch, User2, Wallet, MapPin, Mail, GraduationCap, ArrowLeftSquare, ArrowRightSquare, Clipboard, UserCheck2, Users2, CalendarDays, ChevronRight, ChevronLeft } from "lucide-react";
 
 import { useState, useEffect } from "react";
 
@@ -61,13 +61,15 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
     //console.log(deputado)
 
     const [despesas, setDespesas] = useState<Despesa[]>([])
+    const [totalDespesa, setTotalDespesa] = useState<{ total: number, ano: number, declarado: number }>({ ano: new Date().getFullYear(), declarado: 0, total: 0 })
+    const [anoDespesa, setAnoDespesa] = useState<number>(new Date().getFullYear())
 
     const [section, setSection] = useState<string>("despesas") // info, despesas ou partido
 
     const [page, setPage] = useState<number>(1)
 
     async function load() {
-        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", [], []).catch(() => {
+        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", [], [], null, 10).catch(() => {
             return null
         })
 
@@ -78,9 +80,22 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
         setDespesas(despesas || [])
     }
 
+    async function load_total() {
+        const { total, declarado } = await clientApi.obter_gastos_deputado_ano(deputado.id, anoDespesa)
+
+        setTotalDespesa({ total, declarado, ano: anoDespesa })
+        setAnoDespesa(anoDespesa)
+
+        return total
+    }
+
     useEffect(() => {
         load()
     }, [page])
+
+    useEffect(() => {
+        load_total()
+    }, [anoDespesa])
 
     const title = `Informações de ${deputado.nomeCivil}`
 
@@ -88,7 +103,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
         <>
             <Head>
                 <title>{title}</title>
-                <meta name="description" content={`Informações sobre o deputado ${deputado.nomeCivil}, sem omissões! Aproveite.`} />
+                <meta name="description" content={`Estamos mostrando informações, partido e despesas de ${deputado.nomeCivil} ao fácil acesso!`} />
             </Head>
             <Navbar />
             <header id={style.header}>
@@ -105,6 +120,24 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                 <section hidden={section !== "despesas"}>
                     <br />
                     <h2>Despesas</h2>
+                    <div id={style.totals_card} hidden={!totalDespesa}>
+                        <ChevronLeft size={55} onClick={() => {
+                            const ano = totalDespesa.ano
+                            setAnoDespesa(ano - 1)
+                        }}/>
+                        <div>
+                            <h1>Período {totalDespesa?.ano}</h1>
+                            <p id={style.total}>R$ {Number(totalDespesa?.total.toFixed(2)).toLocaleString("en-US").replace(/,/g, ".") || "unknown"}</p>
+                            <p id={style.declarados}>{totalDespesa?.declarado} compras declaradas</p>
+                        </div>
+                        <ChevronRight size={55} onClick={() => {
+                            const ano = totalDespesa.ano
+                            if(ano + 1 > new Date().getFullYear()) {
+                                return;
+                            }
+                            setAnoDespesa(ano + 1)
+                        }}/>
+                    </div>
                     <div className={style.cards}>
                         {despesas && despesas.map(((despesa, i) => (
                             <div key={i}>
