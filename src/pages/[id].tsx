@@ -62,6 +62,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
 
     const [despesas, setDespesas] = useState<Despesa[]>([])
     const [totalDespesa, setTotalDespesa] = useState<{ total: number, ano: number, declarado: number }>({ ano: new Date().getFullYear(), declarado: 0, total: 0 })
+    const [carregandoDespesa, setCarregandoDespesa] = useState(false)
     const [anoDespesa, setAnoDespesa] = useState<number>(new Date().getFullYear())
 
     const [section, setSection] = useState<string>("despesas") // info, despesas ou partido
@@ -81,10 +82,12 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
     }
 
     async function load_total() {
+        setCarregandoDespesa(true)
         const { total, declarado } = await clientApi.obter_gastos_deputado_ano(deputado.id, anoDespesa)
 
         setTotalDespesa({ total, declarado, ano: anoDespesa })
         setAnoDespesa(anoDespesa)
+        setCarregandoDespesa(false)
 
         return total
     }
@@ -94,6 +97,9 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
     }, [page])
 
     useEffect(() => {
+        if(carregandoDespesa) {
+            return; // Existem usuários impacientes que ficam clicando insistentemente, não faremos nenhum outro carregamento enquanto o atual não terminar.
+        }
         load_total()
     }, [anoDespesa])
 
@@ -127,7 +133,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                         }}/>
                         <div>
                             <h1>Período {totalDespesa?.ano}</h1>
-                            <p id={style.total}>R$ {Number(totalDespesa?.total.toFixed(2)).toLocaleString("en-US").replace(/,/g, ".") || "unknown"}</p>
+                            <p id={style.total}>{carregandoDespesa ? "Carregando..." : `R$ ${Number(totalDespesa?.total.toFixed(2)).toLocaleString("en-US").replace(/,/g, ".") || "unknown"}`}</p>
                             <p id={style.declarados}>{totalDespesa?.declarado} compras declaradas</p>
                         </div>
                         <ChevronRight size={55} onClick={() => {
