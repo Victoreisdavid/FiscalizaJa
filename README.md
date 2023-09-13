@@ -14,6 +14,8 @@ Eu sei que o projeto está bem "cru" ainda, há muitas coisas que estou desenvol
 
 Essa é a primeira versão, é uma versão beta e pode haver bugs.
 
+Link: https://www.fiscalizaja.com
+
 # 🚀 SelfHost
 Aqui está o guia para você hospedar esse projeto você mesmo!
 
