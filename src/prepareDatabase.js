@@ -20,20 +20,12 @@ const turso = createClient(config)
  * Queries para criar todas as tabelas necessárias
  */
 const query = `
-create table users (
-    id text,
-    email text,
-    createdAt text,
-    verified intenger default "0" not null,
-    verificationToken text null,
-    primary key (id, email)
-);
 create table votes (
     voteId text primary key,
     depId text,
     userEmail text,
     approves intenger
-)
+);
 `
 
 async function run() {

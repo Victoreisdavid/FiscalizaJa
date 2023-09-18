@@ -22,7 +22,8 @@ Aqui está o guia para você hospedar esse projeto você mesmo!
 Requisitos:
 
 - Node 16 pra cima
-- Paciência
+- Aplicativo configurado no Google Cloud Console (para poder usar o login com Google, na página de votos)
+
 
 ## Configure a .env
 
