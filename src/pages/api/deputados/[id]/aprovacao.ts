@@ -34,14 +34,16 @@ export default async function Aprova(req: NextApiRequest, res: NextApiResponse) 
 
     const aprova = atual.rows.filter(dep => dep.approves === 1).length
     const desaprova = atual.rows.filter(dep => dep.approves === 0).length
+
+    const total = aprova + desaprova
     
     return res.status(200).send({
         dados: {
             aprova,
             desaprova,
-            total: aprova + desaprova,
-            indiceAprovacao: Math.round(((aprova + desaprova) / aprova) * 100),
-            indiceReprovacao: Math.round(((aprova + desaprova) / desaprova) * 100)
+            total: total,
+            indiceAprovacao: Math.round((100 * aprova) / total) || 0,
+            indiceReprovacao: Math.round((100 * desaprova) / total) || 0
         }
     })
 }
