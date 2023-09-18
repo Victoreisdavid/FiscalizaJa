@@ -85,7 +85,7 @@ export default function VotePage(props: { deputado: Deputado }) {
                         <p>É só selecionar sua conta Google! :D</p>
                         <button className={style.button} onClick={() => signIn("google")}>Login</button>
                     </div>
-                    <Img src="/need_login.svg" width={150} height={150} id={style.img} alt="Ilustração de um homem abrindo uma porta, significa que você precisa fazer login." />
+                    <Img src="/need_login.png" width={150} height={150} id={style.img} alt="Ilustração de um homem abrindo uma porta, significa que você precisa fazer login." />
                 </header>
             </>
         )

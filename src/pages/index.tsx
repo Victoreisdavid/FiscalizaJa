@@ -77,7 +77,7 @@ export default function HomePage() {
                     <p>Despesas dos deputados federais ao fácil acesso.</p>
                     <a id={style.button} href="#anchor">Quero ver!</a>
                 </div>
-                <Img src="/vault.svg" width={520} height={520} id={style.icon} alt="Vetor de um homem olhando por dentro de um cofre, que no contexto do FiscalizaJá, siginifica os cofres públicos com dinheiro do povo." />
+                <Img src="/vault.png" width={460} height={460} id={style.icon} alt="Vetor de um homem olhando por dentro de um cofre, que no contexto do FiscalizaJá, siginifica os cofres públicos com dinheiro do povo." />
             </header>
             <main id={style.main}>
                 <div id="anchor" />
