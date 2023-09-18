@@ -1,4 +1,4 @@
-import { createClient } from "@libsql/client/.";
+import { createClient } from "@libsql/client";
 
 export default function UseTurso() {
     const config = {

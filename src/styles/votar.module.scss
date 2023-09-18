@@ -1,0 +1,128 @@
+@use "colors";
+
+#content {
+    width: calc(100% - 15px);
+    padding: 15px;
+    margin-top: 16vh;
+
+    text-align: center;
+
+    p {
+        font-size: 1.4em;
+    }
+
+    .gray {
+        color: colors.$gray;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 3.6rem;
+    }
+
+    #img {
+        margin: auto;
+        margin-bottom: 0.6rem;
+        border-radius: 50%;
+        object-fit: cover;
+        mix-blend-mode: multiply;
+    }
+
+    .separate {
+        margin-top: 3.6rem;
+    }
+
+    #voting_buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 24px;
+
+        width: fit-content;
+        margin: auto;
+
+        button {
+            box-shadow: none;
+            transition-duration: 200ms;
+
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+
+        #yes {
+            background-color: colors.$terciary;
+            padding: 12px 17px
+        }
+
+        #no {
+            background-color: colors.$quaternary;
+            padding: 12px 17px
+        }
+    }
+
+    #reqs {
+        width: fit-content;
+        margin: auto;
+
+        text-align: left;
+
+        p {
+            font-size: 1.28em
+        }
+
+        li {
+            font-size: 1.25em;
+        }
+    }
+}
+
+#informative_header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: fit-content;
+    margin: auto;
+    margin-top: 26vh;
+    gap: 5rem;
+
+    p {
+        color: colors.$gray;
+        font-size: 1.4em;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-top: -3px;
+    }
+
+    #img {
+        margin: auto;
+        border-radius: 50%;
+        object-fit: cover;
+        mix-blend-mode: multiply;
+    }
+}
+
+.button {
+    display: block;
+    
+    width: fit-content;
+    margin: 24px 0 0 0;
+
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.3em;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    color: colors.$light;
+    background-color: colors.$primary;
+    box-shadow: 0px 0px 10px colors.$primary;
+
+    border-radius: 5px;
+    border: none;
+    padding: 12px 24px
+}

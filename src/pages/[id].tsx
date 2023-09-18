@@ -2,6 +2,7 @@ import Head from "next/head";
 import Img from "next/image";
 import Navbar from "../components/Navbar";
 import DadosAbertosApi from "../functions/api";
+import axios from "axios";
 
 import style from "../styles/deputado.module.scss"
 
@@ -65,6 +66,8 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
     const [carregandoDespesa, setCarregandoDespesa] = useState(false)
     const [anoDespesa, setAnoDespesa] = useState<number>(new Date().getFullYear())
 
+    const [aprovacao, setAprovacao] = useState(null)
+
     const [section, setSection] = useState<string>("despesas") // info, despesas ou partido
 
     const [page, setPage] = useState<number>(1)
@@ -73,10 +76,18 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
         const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", [], [], null, 10).catch(() => {
             return null
         })
-
+        
         if(!despesas) {
             document.querySelector<HTMLDivElement>(".hidden-warn").style.display = "block"
         }
+
+        const aprovacoes = await axios.get(`/api/deputados/${deputado.id}/aprovacao`).catch((e) => {
+            return {
+                data: { dados: null }
+            }
+        })
+
+        setAprovacao(aprovacoes.data.dados)
 
         setDespesas(despesas || [])
     }
@@ -116,6 +127,18 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                 <Img src={deputado.ultimoStatus.urlFoto} width={180} height={180} id={style.img} alt={`Foto de perfil do deputado ${deputado.ultimoStatus.nome}.`} />
                 <h1>{deputado.nomeCivil}</h1>
                 <p>{deputado.ultimoStatus.nome}</p>
+                <div id={style.details}>
+                    <h2>Índice de aprovação</h2>
+                    <div id={style.bars}>
+                        <p>Total: {aprovacao?.total || 0}</p>
+                        <div id={style.bar_total} />
+                        <p>Aprova: {aprovacao?.aprova || 0} ({aprovacao?.indiceAprovacao || 0}%)</p>
+                        <div id={style.bar_yes} style={{ width: aprovacao?.indiceAprovacao ? `${aprovacao?.indiceAprovacao}%` : 0 }} />
+                        <p>Desaprova: {aprovacao?.desaprova || 0} ({aprovacao?.indiceReprovacao || 0}%)</p>
+                        <div id={style.bar_no} style={{ width: aprovacao?.indiceReprovacao ? `${aprovacao?.indiceReprovacao}%` : 0 }} />
+                    </div>
+                    <a href={`/${deputado.id}/votar`}>Quero votar!</a>
+                </div>
             </header>
             <main id={style.main}>
                 <nav>

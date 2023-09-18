@@ -3,9 +3,9 @@
  * Ao rodar, será criado todas as tabelas, dados e configurações necessárias para o banco de dados ser usado.
  */
 
-import { createClient } from "@libsql/client"
+const { createClient } = require("@libsql/client");
 
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 
 dotenv.config()
 
