@@ -39,6 +39,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 export default function VotePage(props: { deputado: Deputado }) {
     const { deputado } = props
 
+    const title = `${deputado.nomeCivil} | Índice de aprovação FiscalizaJá`
+
     const { data, status } = useSession()
     const [display, setDisplay] = useState("none")
 
@@ -65,6 +67,10 @@ export default function VotePage(props: { deputado: Deputado }) {
     if(status === "loading") {
         return (
             <>
+                <Head>
+                    <title>{title}</title>
+                    <meta name="robots" content="noindex" />
+                </Head>
                 <header id={style.informative_header}>
                     <div>
                         <h1>Por favor aguarde</h1>
@@ -79,6 +85,10 @@ export default function VotePage(props: { deputado: Deputado }) {
     if(status === "unauthenticated") {
         return (
             <>
+                <Head>
+                    <title>{title}</title>
+                    <meta name="robots" content="noindex" />
+                </Head>
                 <header id={style.informative_header}>
                     <div>
                         <h1>Você precisa fazer login primeiro</h1>
@@ -95,6 +105,10 @@ export default function VotePage(props: { deputado: Deputado }) {
         if(voto !== null) {
             return (
                 <>
+                    <Head>
+                        <title>{title}</title>
+                        <meta name="robots" content="noindex" />
+                    </Head>
                     <header id={style.informative_header}>
                         <div>
                             <h1>Seu voto foi computado.</h1>
@@ -108,6 +122,10 @@ export default function VotePage(props: { deputado: Deputado }) {
         } else {
             return (
                 <>
+                    <Head>
+                        <title>{title}</title>
+                        <meta name="robots" content="noindex" />
+                    </Head>
                     <main id={style.content}>
                         <h1>Olá, {data.user.name}!</h1>
                         
