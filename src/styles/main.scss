@@ -19,3 +19,7 @@ body {
 .hidden-warn {
     display: none;
 }
+
+.bad-warn {
+    color: colors.$quaternary;
+}

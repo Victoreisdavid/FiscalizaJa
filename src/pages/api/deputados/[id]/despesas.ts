@@ -11,7 +11,7 @@ export default async function Deputado(req: NextApiRequest, res: NextApiResponse
     const ordenarPor = req.query.ordenarPor as string || "ano"
     const meses = Array.isArray(req.query.meses) ? req.query.meses.map((num) => parseInt(num, 10)) : [parseInt(req.query.meses, 10)]
     const anos = Array.isArray(req.query.ano) ? req.query.ano.map((num) => parseInt(num, 10)) : [parseInt(req.query.ano, 10)]
-    const fornecedor = req.query.fornecedor as string || undefined
+    const fornecedor = req.query.cnpjCpfFornecedor as string || undefined
 
     if(!id || isNaN(id)) {
         return res.status(404).send({

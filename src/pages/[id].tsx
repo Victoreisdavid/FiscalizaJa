@@ -12,7 +12,8 @@ import { Partido } from "../interfaces/Partido";
 
 import { CircleDollarSign, UserCircle, Newspaper, Building2, DollarSign, CalendarRange, Tag, FileSearch, User2, Wallet, MapPin, Mail, GraduationCap, ArrowLeftSquare, ArrowRightSquare, Clipboard, UserCheck2, Users2, CalendarDays, ChevronRight, ChevronLeft } from "lucide-react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Loading from "../components/Loading";
 
 const serverApi = new DadosAbertosApi("server")
 const clientApi = new DadosAbertosApi("browser") // esse será usado no lado do cliente
@@ -61,6 +62,8 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
 
     //console.log(deputado)
 
+    const [loading, setLoading] = useState<boolean>(true)
+
     const [despesas, setDespesas] = useState<Despesa[]>([])
     const [totalDespesa, setTotalDespesa] = useState<{ total: number, ano: number, declarado: number }>({ ano: new Date().getFullYear(), declarado: 0, total: 0 })
     const [carregandoDespesa, setCarregandoDespesa] = useState(false)
@@ -72,8 +75,29 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
 
     const [page, setPage] = useState<number>(1)
 
+    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+    const [mesesSelecionados, selecionarMes] = useState(meses)
+
+    const anoSelecionado = useRef(null)
+    const fornecedor = useRef(null)
+
     async function load() {
-        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", [], [], null, 10).catch(() => {
+        const numeroMeses = mesesSelecionados.map((mes) => {
+            const index = meses.findIndex((procuraMes) => {
+                return mes === procuraMes
+            })
+            return index === -1 ? null : index + 1
+        }).filter(numero => numero > -1)
+
+        console.log(numeroMeses)
+
+        const ano = anoSelecionado.current.value || null
+        const cpfCnpj = fornecedor.current.value || null
+
+        setDespesas([])
+        setLoading(true)
+
+        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", numeroMeses, [ano], cpfCnpj, 10).catch(() => {
             return null
         })
         
@@ -90,6 +114,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
         setAprovacao(aprovacoes.data.dados)
 
         setDespesas(despesas || [])
+        setLoading(false)
     }
 
     async function load_total() {
@@ -113,6 +138,27 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
         }
         load_total()
     }, [anoDespesa])
+
+    function gerenciaMes(mes: string) {
+        const atual = mesesSelecionados.find((m) => m === mes)
+
+        if(atual) {
+            selecionarMes(mesesSelecionados.filter(m => m !== mes))
+        } else {
+            selecionarMes(selecionados => [...selecionados, mes])
+        }
+    }
+
+    function aplicar() {
+        const numeroMeses = mesesSelecionados.map((mes) => {
+            const index = meses.findIndex((procuraMes) => {
+                return mes === procuraMes
+            })
+            return index === -1 ? null : index
+        }).filter(numero => numero > -1)
+
+
+    }
 
     const title = `Informações de ${deputado.nomeCivil}`
 
@@ -167,18 +213,42 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                             setAnoDespesa(ano + 1)
                         }}/>
                     </div>
+                    <div id={style.filter}>
+                        <h2>Opções de filtro</h2>
+                        <div id={style.content}>
+                            <label htmlFor="meses">Meses: </label>
+                            <select id="meses" onChange={(e) => { 
+                                gerenciaMes(meses[Number(e.target.value) - 1])
+                                e.target.selectedIndex = -1
+                             }}>
+                                { meses.map((mes: string, index) => ( 
+                                    <option value={index + 1} key={index} className={mesesSelecionados.find((procuraMes) => mes === procuraMes) ? `${style.selected}` : ""}>{mes}</option>
+                                )) }
+                            </select>
+                            <label htmlFor="ano">Ano: </label>
+                            <input id="ano" type="number" defaultValue={new Date().getFullYear()} size={3} ref={anoSelecionado} />
+                            <br /> <br />
+                            <label htmlFor="fornecedor">Fornecedor (CPF ou CNPJ): </label>
+                            <input type="text" placeholder="123.456.789-12" ref={fornecedor} />
+                            <br />
+                            <button onClick={() => {
+                                load()
+                            }}>Aplicar</button>
+                        </div>
+                    </div>
                     <div className={style.cards}>
                         {despesas && despesas.map(((despesa, i) => (
                             <div key={i}>
                                 <h1>{despesa.cnpjCpfFornecedor.length === 11 ? <User2 size={34} style={{ verticalAlign: "-8px" }} /> : <Building2 size={34} style={{ verticalAlign: "-8px" }} /> } {despesa.nomeFornecedor}</h1>
-                                <p><Tag size={30} style={{ verticalAlign: "-9px" }} /> {despesa.cnpjCpfFornecedor.length < 1 ? "N/A" : despesa.cnpjCpfFornecedor.length === 11 ? despesa.cnpjCpfFornecedor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4") : despesa.cnpjCpfFornecedor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')}</p>
-                                <p><DollarSign size={30} style={{ verticalAlign: "-9px" }} /> R$ {despesa.valorLiquido}</p>
+                                <p><Tag size={30} style={{ verticalAlign: "-9px" }} /> {despesa.cnpjCpfFornecedor.length < 1 ? <span className="bad-warn">CPF/CNPJ ausente</span> : despesa.cnpjCpfFornecedor.length === 11 ? despesa.cnpjCpfFornecedor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4") : despesa.cnpjCpfFornecedor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')}</p>
+                                <p><DollarSign size={30} style={{ verticalAlign: "-9px" }} /> {despesa.valorLiquido ? `R$ ${despesa.valorLiquido}` : <span className="bad-warn">Valor ausente</span>}</p>
                                 <p><CalendarRange size={30} style={{ verticalAlign: "-8px" }} /> {new Date(despesa.dataDocumento).toLocaleDateString()}</p>
-                                <p><FileSearch size={30} style={{ verticalAlign: "-8px" }} /> <a href={despesa.urlDocumento || "#"} target="_blank">Documento/comprovante</a></p>
+                                <p><FileSearch size={30} style={{ verticalAlign: "-8px" }} /> <a href={despesa.urlDocumento || "#"} target="_blank">{despesa.urlDocumento ? "Documento/comprovante" : <span className="bad-warn">Comprovante ausente</span>}</a></p>
                             </div>
                         )))}
                     </div>
                     <br />
+                    { loading && <Loading /> }
                     <div id={style.page_selector}>
                         <button onClick={() => { 
                             setPage(page > 1 ? page - 1 : page)    

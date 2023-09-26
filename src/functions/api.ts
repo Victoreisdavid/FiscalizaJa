@@ -72,14 +72,14 @@ class DadosAbertosApi {
             itens: number | null,
             pagina: number,
             ordenarPor: string,
-            fornecedor?: string,
+            cnpjCpfFornecedor?: string,
             mes?: number[] | null,
             ano?: number[] | null
         } = {
             itens: items || null,
             pagina,
             ordenarPor,
-            fornecedor
+            cnpjCpfFornecedor: fornecedor?.replace(/\D/g, "")
         }
 
         if(meses && !isNaN(Number(meses))) {

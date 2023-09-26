@@ -126,6 +126,74 @@
         }
     }
 
+    #filter {
+        margin: 1.2rem auto 1.85rem auto;
+        padding: 13px;
+        max-width: 45rem;
+        
+        box-shadow: 0px 0px 2px colors.$dark;
+        border-radius: 8px;
+
+        min-height: 5rem;
+
+        #content {
+            width: fit-content;
+            margin: auto;
+
+            label {
+                font-size: 1.1em;
+                margin-left: 6px;
+            }
+
+            input[type=number] {
+                width: 4.5rem;
+                border: none;
+                background-color: colors.$light;
+                padding: 5px;
+                font-size: 1em;
+            }
+
+            input[type=text] {
+                border: none;
+                background-color: colors.$light;
+                padding: 5px;
+                font-size: 1em;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            select {
+                border: none;
+                background-color: colors.$light;
+                padding: 5px;
+                font-size: 1em;
+                width: 3rem;
+
+                option {
+                    font-size: 1em;
+                }
+
+                .selected {
+                    background-color: colors.$primary;
+                    color: colors.$light;
+                }
+            }
+
+            button {
+                display: block;
+                margin: 1.2rem auto 1rem auto;
+                font-size: 1.12em;
+                color: colors.$light;
+                background-color: colors.$primary;
+                border: none;
+                padding: 12px 18px;
+                border-radius: 8px;
+            }
+        }
+    }
+
     .cards {
         display: flex;
         align-items: center;
@@ -142,6 +210,10 @@
             font-size: 1.1em;
             margin: 10px 0px 10px 0px;
             text-align: left;
+        }
+
+        a {
+            text-decoration: none;
         }
 
         div {
