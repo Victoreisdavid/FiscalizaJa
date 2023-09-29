@@ -166,6 +166,23 @@ class DadosAbertosApi {
 
         return partido.data.dados
     }
+
+    /**
+     * # Obter todos os partidos
+     * Obtém todos os partidos que estão em ação na câmara dos deputados.
+     */
+    async obter_partidos(page?: number, limit?: number) {
+        const partidos = await this.api.get("/partidos", {
+            params: {
+                pagina: page,
+                itens: limit
+            }
+        }).catch((e) => {
+            return { data: { dados: null } }
+        })
+
+        return partidos.data.dados
+    }
 }
 
 export default DadosAbertosApi

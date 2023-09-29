@@ -33,4 +33,11 @@ interface Partido {
     ]
 }
 
-export type { Partido }
+interface PartidoResumo {
+    id: string,
+    nome: string,
+    sigla: string,
+    uri: string
+}
+
+export type { Partido, PartidoResumo }

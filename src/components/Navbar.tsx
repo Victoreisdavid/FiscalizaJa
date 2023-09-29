@@ -6,7 +6,7 @@ export default function Navbar() {
     return (
         <>
             <nav id={style.nav}>
-                <a href="/">
+                <a href="/deputados">
                     <ArrowLeft size={34} />
                 </a>
             </nav>

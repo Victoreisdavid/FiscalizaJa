@@ -6,62 +6,148 @@
     align-items: center;
     flex-direction: column;
 
+    width: 90%;
+    margin: auto;
+
     .dep {
         display: flex;
 
         text-align: left;
 
-        width: 40%;
-        height: 150px;
+        width: 90%;
+        height: 50px;
 
-
-        margin: 8px auto 8px auto;
-        padding: 15px;
+        margin: 5px auto 5px auto;
+        padding: 5px;
         
-        box-shadow: 0px 0px 2px colors.$dark;
+        box-shadow: 0px 0px 1px colors.$dark;
         border-radius: 5px;
 
         text-decoration: none;
         color: colors.$dark;
 
         .text {
-            margin-left: 24px;
+            margin-top: 9px;
+            margin-left: 14px;
+            overflow: hidden;
         }
 
         h1 {
+            font-size: 1.1em;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
         }
 
         p {
-            font-size: 1.3em !important;
+            font-size: 1.2em;
         }
 
-        @media screen and (max-width: 1300px) {
-            width: 60%;
+    }
+}
+
+#header {
+    text-align: center;
+
+    h1 {
+        font-size: 2.4em;
+        font-weight: 600;
+        margin-bottom: 0.6rem;
+    }
+
+    p {
+        font-size: 1.3em;
+    }
+
+    margin: 10vh auto 10vh auto;
+
+    @media screen and (min-width: 800px) {
+        width: 45%;
+    }
+}
+
+#main {
+    margin: auto;
+
+    #search {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        input[type=text] {
+            display: block;
+            margin: 24px 0 24px auto;
+            padding: 10px 24px;
+            width: 310px;
+    
+            background-color: colors.$mid;
+            box-shadow: 0px 0px 1px colors.$dark;
+    
+            border: none;
+            border-radius: 8px 0px 0px 8px;
+    
+            &:focus {
+                outline: none;
+            }
         }
 
-        @media screen and (max-width: 900px) {
-            width: 70%;
+        button {
+            margin: 0 auto 0 0;
+
+            padding: 6px 24px;
+            border-radius: 0px 8px 8px 0px;
+            border: none;
+
+            background-color: colors.$mid;
+            box-shadow: 0px 0px 1px colors.$dark;
+        }
+    }
+
+    #filter {
+        
+        width: fit-content;
+        margin: auto;
+
+        margin-bottom: 1.5rem;
+
+        select {
+            background-color: colors.$mid;
+            border: none;
+
+            box-shadow: 0px 0px 1px colors.$dark;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    table {
+        margin: auto;
+        overflow-x: auto;
+      
+        thead {
+            th {
+                background-color: colors.$lightest;
+                padding: 10px;
+            }
         }
 
-        @media screen and (max-width: 700px) {
-            width: 95%;
+        th, td {
+            text-align: justify;
         }
 
-        @media screen and (max-width: 530px) {
-            height: 300px;
+        td {
+            padding: 10px;
+        }
 
-            flex-direction: column-reverse;
+        .img_text {
+            display: flex;
+            align-items: center;
 
-            .text {
-                margin: auto;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                
-                width: fit-content;
-
+            .img {
+                object-fit: cover;
+                border-radius: 10px;
             }
         }
     }
