@@ -18,6 +18,9 @@ body {
 
 .hidden-warn {
     display: none;
+    a {
+        color: colors.$light;
+    }
 }
 
 .bad-warn {

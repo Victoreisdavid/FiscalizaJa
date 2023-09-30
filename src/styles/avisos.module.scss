@@ -1,0 +1,24 @@
+@use "colors";
+
+#container {
+    width: fit-content;
+    max-width: 960px;
+    margin: 4vh auto 4vh auto;
+    padding: 1.3rem;
+
+
+    header {
+        margin-bottom: 2rem;
+    }
+
+    p {
+        font-size: 1.15em;
+        margin: 0.4rem 0 0.4rem 0;
+    }
+
+    a {
+        text-align: center;
+        text-decoration: none;
+        color: colors.$primary;
+    }
+}

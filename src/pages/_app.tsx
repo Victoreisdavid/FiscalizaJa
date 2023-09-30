@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
     return (
         <>
-            <Notification message="A plataforma do governo está apresentando instabilidades, tente novamente!" />
+            <Notification message="A plataforma do governo está apresentando instabilidades" about="/avisos/plataformaInstavel" />
             <div id="site-container">
                 <SessionProvider session={pageProps.session}>
                     <Component {...pageProps} />
