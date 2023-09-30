@@ -120,6 +120,18 @@
                 outline: none;
             }
         }
+        
+        #line {
+            display: none;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media screen and (max-width: 560px) {
+            #line {
+                display: block;
+            }
+        }
     }
 
     table {

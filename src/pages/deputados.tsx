@@ -115,6 +115,7 @@ export default function ListaDeputados(props: { deputados: DeputadoResumo[], par
                             <option key={partido} value={partido}>{partido}</option>
                         )) }
                     </select>
+                    <div id={style.line}></div>
                     <label htmlFor="estados"> Estado: </label>
                     <select name="estados" ref={estadoRef} onChange={() => {
                         filter()
