@@ -18,6 +18,8 @@ import Loading from "../components/Loading";
 const serverApi = new DadosAbertosApi("server")
 const clientApi = new DadosAbertosApi("browser") // esse será usado no lado do cliente
 
+const UFs = {'AC':'Acre','AL':'Alagoas','AP':'Amapá','AM':'Amazonas','BA':'Bahia','CE':'Ceará','DF':'Distrito Federal','ES':'Espírito Santo','GO':'Goiás','MA':'Maranhão','MT':'Mato Grosso','MS':'Mato Grosso do Sul','MG':'Minas Gerais','PA':'Pará','PB':'Paraíba','PR':'Paraná','PE':'Pernambuco','PI':'Piauí','RJ':'Rio de Janeiro','RN':'Rio Grande do Norte','RS':'Rio Grande do Sul','RO':'Rondônia','RR':'Roraima','SC':'Santa Catarina','SP':'São Paulo','SE':'Sergipe','TO':'Tocantins'}
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const id: number = Number(context.query?.id) as number | undefined
 
@@ -267,7 +269,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                             <h1><User2 size={34} style={{ verticalAlign: "-8px" }} />{deputado.nomeCivil}</h1>
                             <p><Wallet size={34} style={{ verticalAlign: "-9px" }} /> {deputado.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}</p>
                             <p><CalendarDays size={34} style={{ verticalAlign: "-8px" }} /> {idade} anos</p>
-                            <p><MapPin size={34}  style={{ verticalAlign: "-9px" }} /> {deputado.municipioNascimento}</p>
+                            <p><MapPin size={34}  style={{ verticalAlign: "-9px" }} /> {deputado.municipioNascimento}, {UFs[deputado.ufNascimento.toUpperCase()]}</p>
                             <p><GraduationCap size={34}  style={{ verticalAlign: "-9px" }} /> {deputado.escolaridade}</p>
                             <p><Mail size={34} style={{ verticalAlign: "-11px" }} /> {deputado.ultimoStatus.email}</p>
                         </div>
