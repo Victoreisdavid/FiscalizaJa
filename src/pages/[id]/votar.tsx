@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
-import DadosAbertosApi from "../../functions/api";
+import DadosAbertosApi from "../../functions/DadosAbertosApi";
 import Img from "next/image";
 import Head from "next/head";
 import { Deputado } from "../../interfaces/Deputado";

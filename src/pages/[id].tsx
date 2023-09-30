@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Img from "next/image";
 import Navbar from "../components/Navbar";
-import DadosAbertosApi from "../functions/api";
+import DadosAbertosApi from "../functions/DadosAbertosApi";
 import axios from "axios";
 
 import style from "../styles/deputado.module.scss"

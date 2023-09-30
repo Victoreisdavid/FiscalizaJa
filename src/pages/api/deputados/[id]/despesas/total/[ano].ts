@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import  DadosAbertosApi from "../../../../../../functions/api";
+import  DadosAbertosApi from "../../../../../../functions/DadosAbertosApi";
 
 const api = new DadosAbertosApi("server")
 

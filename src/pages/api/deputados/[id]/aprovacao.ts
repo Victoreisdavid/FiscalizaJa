@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]";
-import DadosAbertosApi from "../../../../functions/api";
+import DadosAbertosApi from "../../../../functions/DadosAbertosApi";
 import crypto from "crypto";
 
 import UseTurso from "../../../../turso";

@@ -9,7 +9,7 @@ import { PartidoResumo } from "../interfaces/Partido";
 
 import { Search } from "lucide-react";
 
-import DadosAbertosApi from "../functions/api";
+import DadosAbertosApi from "../functions/DadosAbertosApi";
 
 import { useState, useRef } from "react";
 
