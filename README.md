@@ -23,7 +23,8 @@ Requisitos:
 
 - Node 16 pra cima
 - Aplicativo configurado no Google Cloud Console (para poder usar o login com Google, na página de votos)
-
+- Conta no https://turso.tech
+- Um banco de dados criado no Turso (mais informações na documentação deles)
 
 ## Configure a .env
 
@@ -31,6 +32,12 @@ Crie um arquivo `.env` no diretório principal, e coloque o seguinte
 
 ```
 NEXT_PUBLIC_API_URL="URL"
+
+TURSO_DB_URL="URL do seu banco de dados no turso"
+TURSO_DB_TOKEN="Auth token do seu banco de dados no turso"
+
+GOOGLE_CLIENT_ID="Client ID do aplicativo no Google cloud console"
+GOOGLE_SECRET_TOKEN="Secret token do aplicativo no Google cloud console"
 ```
 
 Subsititua "URL" pela URL do seu website, dessa forma:
@@ -44,6 +51,7 @@ precisei fazer um backend para usar como proxy 🤡
 
 Passos:
 - Instale as dependências: `npm install`.
+- Rode o arquivo que cria as tabelas necessárias `node src/prepareDatabase.js`
 - Faça build das páginas: `npm run build`.
 - Inicie o Next em produção: `npm run start`.
 - Está fazendo alterações? Use o modo de desenvolvimento: `npm run dev`.
