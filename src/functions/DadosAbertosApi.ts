@@ -151,35 +151,38 @@ class DadosAbertosApi {
             last = getParam(lastUrl, "pagina")
         }
 
-        let pagina = 1;
+        let pagina = 2;
+
+        const promises = []
 
         while(last !== null) {
             if(pagina > last) {
                 break;
             }
 
-            const proximas_despesas = await this.api.get(`/deputados/${id}/despesas`, {
+            const proximas_despesas = this.api.get(`/deputados/${id}/despesas`, {
                 params: {
                     ano,
                     itens: 150,
                     pagina
                 }
-            }).catch(() => { return null })
+            })
 
-            if(!proximas_despesas || !proximas_despesas.data.dados.length) {
-                last = null
-                break;
-            }
-
-            for(const despesa of proximas_despesas.data.dados) {
-                despesas.data.dados.push(despesa)
-            }
+            promises.push(proximas_despesas)
 
             pagina += 1
-            await delay(150)
         }
         
         let total = 0;
+
+        const results = await Promise.all(promises)
+        console.log(results)
+
+        for(const result of results) {
+            for(const dado of result.data.dados) {
+                despesas.data.dados.push(dado)
+            }
+        }
         
         for(const despesa of despesas.data.dados) {
             total += despesa.valorLiquido
