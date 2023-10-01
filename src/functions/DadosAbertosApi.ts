@@ -2,7 +2,30 @@ import axios, { AxiosInstance } from "axios";
 import type { DeputadoResumo, Deputado, Despesa } from "../interfaces/Deputado";
 import type { Partido } from "../interfaces/Partido";
 
-import { parse } from "url";
+function getParam(url: string, param: string) {
+    const params = url.split("?")[1]
+
+    const values = params.split("&")
+
+    const value = values.find(function(val: string) {
+        const keyValue = val.split('=');
+        return keyValue[0] === 'pagina';
+    })
+
+    if(value) {
+        return value.split("=")[1]
+    } else {
+        return null
+    }
+}
+
+async function delay(time: number) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(true)
+        }, time)
+    })
+}
 
 class DadosAbertosApi {
 
@@ -66,7 +89,7 @@ class DadosAbertosApi {
      * @param ordenarPor Ordenar com base em qualquer um dos campos do retorno.
      * 
      */
-    async obter_gastos_deputado(id: number, pagina: number, ordenarPor: string = "ano", meses?: number[], ano?: number[], fornecedor: string = undefined, items?: number): Promise<Despesa[] | null> {
+    async obter_gastos_deputado(id: number, pagina: number, ordenarPor: string = "ano", meses?: number[], ano?: number[], fornecedor: string = undefined, items?: number): Promise<{ dados: Despesa[], links: any } | null> {
         
         const params: {
             itens: number | null,
@@ -95,11 +118,11 @@ class DadosAbertosApi {
             paramsSerializer: {
                 indexes: null
             }
-        }).catch((e) => { return { data: { dados: null } } })
+        }).catch((e) => { return { data: { dados: null, links: null } } })
     
         //console.log(gastos.data.dados)
     
-        return gastos.data.dados
+        return gastos.data
     }
 
     /**
@@ -120,11 +143,21 @@ class DadosAbertosApi {
             return null
         }
 
-        let pagina = 1;
-        
-        let last = false
+        let last = null
 
-        while(last === false) {
+        const lastUrl = despesas.data.links.find(link => { return link.rel == "last" })?.href
+
+        if(lastUrl) {
+            last = getParam(lastUrl, "pagina")
+        }
+
+        let pagina = 1;
+
+        while(last !== null) {
+            if(pagina > last) {
+                break;
+            }
+
             const proximas_despesas = await this.api.get(`/deputados/${id}/despesas`, {
                 params: {
                     ano,
@@ -134,14 +167,16 @@ class DadosAbertosApi {
             }).catch(() => { return null })
 
             if(!proximas_despesas || !proximas_despesas.data.dados.length) {
-                last = true
+                last = null
                 break;
             }
 
             for(const despesa of proximas_despesas.data.dados) {
                 despesas.data.dados.push(despesa)
             }
+
             pagina += 1
+            await delay(150)
         }
         
         let total = 0;

@@ -66,7 +66,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
 
     const [loading, setLoading] = useState<boolean>(true)
 
-    const [despesas, setDespesas] = useState<Despesa[]>([])
+    const [despesas, setDespesas] = useState<{ dados: Despesa[] }>()
     const [totalDespesa, setTotalDespesa] = useState<{ total: number, ano: number, declarado: number }>({ ano: new Date().getFullYear(), declarado: 0, total: 0 })
     const [carregandoDespesa, setCarregandoDespesa] = useState(false)
     const [anoDespesa, setAnoDespesa] = useState<number>(new Date().getFullYear())
@@ -91,12 +91,10 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
             return index === -1 ? null : index + 1
         }).filter(numero => numero > -1)
 
-        console.log(numeroMeses)
-
         const ano = anoSelecionado.current.value || null
         const cpfCnpj = fornecedor.current.value || null
 
-        setDespesas([])
+        setDespesas({ dados: [] })
         setLoading(true)
 
         const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", numeroMeses, [ano], cpfCnpj, 10).catch(() => {
@@ -239,7 +237,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                         </div>
                     </div>
                     <div className={style.cards}>
-                        {despesas && despesas.map(((despesa, i) => (
+                        {despesas?.dados && despesas?.dados.map(((despesa, i) => (
                             <div key={i}>
                                 <h1>{despesa.cnpjCpfFornecedor.length === 11 ? <User2 size={34} style={{ verticalAlign: "-8px" }} /> : <Building2 size={34} style={{ verticalAlign: "-8px" }} /> } {despesa.nomeFornecedor}</h1>
                                 <p><Tag size={30} style={{ verticalAlign: "-9px" }} /> {despesa.cnpjCpfFornecedor.length < 1 ? <span className="bad-warn">CPF/CNPJ ausente</span> : despesa.cnpjCpfFornecedor.length === 11 ? despesa.cnpjCpfFornecedor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4") : despesa.cnpjCpfFornecedor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')}</p>

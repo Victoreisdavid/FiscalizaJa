@@ -24,5 +24,5 @@ export default async function Deputado(req: NextApiRequest, res: NextApiResponse
     res.setHeader("Access-Control-Allow-Origin", "*")
     res.setHeader("Access-Control-Allow-Headers", "*")
 
-    return res.status(200).send({ dados: despesas })
+    return res.status(200).send(despesas)
 }
