@@ -25,35 +25,35 @@
         mix-blend-mode: multiply;
     }
 
+    p {
+        color: colors.$dark;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 0.8rem;
+    }
+
+    a {
+        display: block;
+        width: fit-content;
+        margin: auto;
+        text-align: center;
+        font-size: 1.3em;
+        text-decoration: none;
+        color: colors.$primary;
+
+        transition-duration: 200ms;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+
     #details {
         text-align: left;
         margin: auto;
         margin-top: 3.2rem;
-
-        p {
-            color: colors.$dark;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 0.8rem;
-        }
-
-        a {
-            display: block;
-            width: fit-content;
-            margin: auto;
-            text-align: center;
-            font-size: 1.3em;
-            text-decoration: none;
-            color: colors.$primary;
-
-            transition-duration: 200ms;
-
-            &:hover {
-                transform: scale(1.2);
-            }
-        }
 
         #bars {
             width: 32%;
@@ -93,6 +93,10 @@
                 width: 75%;
             }
         }
+
+        li {
+            font-size: 1.2em;
+        }
     }
 }
 
@@ -106,6 +110,10 @@
     h2 {
         text-align: center;
         margin-bottom: 1.2rem
+    }
+
+    li {
+        font-size: 1.15em;
     }
 
     nav {
@@ -126,7 +134,7 @@
         }
     }
 
-    #filter {
+    .info_card {
         margin: 1.2rem auto 1.85rem auto;
         padding: 13px;
         max-width: 45rem;

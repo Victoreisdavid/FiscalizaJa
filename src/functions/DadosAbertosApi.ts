@@ -131,7 +131,7 @@ class DadosAbertosApi {
      * @param id ID do deputado
      * @param ano Ano das despesas 
      */
-    async obter_gastos_deputado_ano(id: number, ano: number): Promise<{ total: number, declarado: number }> {
+    async obter_gastos_deputado_ano(id: number, ano: number): Promise<{ total: number, declarado: number, irregulares: { semComprovante: number } }> {
         const despesas = await this.api.get(`/deputados/${id}/despesas`, {
             params: {
                 ano,
@@ -176,7 +176,6 @@ class DadosAbertosApi {
         let total = 0;
 
         const results = await Promise.all(promises)
-        console.log(results)
 
         for(const result of results) {
             for(const dado of result.data.dados) {
@@ -188,9 +187,16 @@ class DadosAbertosApi {
             total += despesa.valorLiquido
         }
 
+        const semComprovante = despesas.data.dados.filter(despesa => {
+            return !despesa.urlDocumento
+        })
+
         return {
             total,
-            declarado: despesas.data.dados.length
+            declarado: despesas.data.dados.length,
+            irregulares: {
+                semComprovante: semComprovante.length
+            }
         }
     }
 

@@ -67,7 +67,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
     const [loading, setLoading] = useState<boolean>(true)
 
     const [despesas, setDespesas] = useState<{ dados: Despesa[] }>()
-    const [totalDespesa, setTotalDespesa] = useState<{ total: number, ano: number, declarado: number }>({ ano: new Date().getFullYear(), declarado: 0, total: 0 })
+    const [totalDespesa, setTotalDespesa] = useState<{ total: number, ano: number, declarado: number, irregulares: { semComprovante: number } }>({ ano: new Date().getFullYear(), declarado: 0, total: 0, irregulares: { semComprovante: 0 } })
     const [carregandoDespesa, setCarregandoDespesa] = useState(false)
     const [anoDespesa, setAnoDespesa] = useState<number>(new Date().getFullYear())
 
@@ -119,9 +119,9 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
 
     async function load_total() {
         setCarregandoDespesa(true)
-        const { total, declarado } = await clientApi.obter_gastos_deputado_ano(deputado.id, anoDespesa)
+        const { total, declarado, irregulares } = await clientApi.obter_gastos_deputado_ano(deputado.id, anoDespesa)
 
-        setTotalDespesa({ total, declarado, ano: anoDespesa })
+        setTotalDespesa({ total, declarado, ano: anoDespesa, irregulares })
         setAnoDespesa(anoDespesa)
         setCarregandoDespesa(false)
 
@@ -204,6 +204,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                             <h1>Período {totalDespesa?.ano}</h1>
                             <p id={style.total}>{carregandoDespesa ? "Carregando..." : `R$ ${Number(totalDespesa?.total.toFixed(2)).toLocaleString("en-US").replace(/,/g, ".") || "unknown"}`}</p>
                             <p id={style.declarados}>{totalDespesa?.declarado} compras declaradas</p>
+                            <p className={totalDespesa.irregulares?.semComprovante ? "bad-warn" : ""} hidden={!totalDespesa.irregulares.semComprovante}>{totalDespesa.irregulares?.semComprovante || 0} comprovantes ausentes</p>
                         </div>
                         <ChevronRight size={55} onClick={() => {
                             const ano = totalDespesa.ano
@@ -213,7 +214,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                             setAnoDespesa(ano + 1)
                         }}/>
                     </div>
-                    <div id={style.filter}>
+                    <div className={style.info_card}>
                         <h2>Opções de filtro</h2>
                         <div id={style.content}>
                             <label htmlFor="meses">Meses: </label>
@@ -238,7 +239,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                     </div>
                     <div className={style.cards}>
                         {despesas?.dados && despesas?.dados.map(((despesa, i) => (
-                            <div key={i}>
+                            <div key={i} style={{ borderRight: `${!despesa.cnpjCpfFornecedor || !despesa.urlDocumento ? `8px solid #FF5024` : "none"}` }}>
                                 <h1>{despesa.cnpjCpfFornecedor.length === 11 ? <User2 size={34} style={{ verticalAlign: "-8px" }} /> : <Building2 size={34} style={{ verticalAlign: "-8px" }} /> } {despesa.nomeFornecedor}</h1>
                                 <p><Tag size={30} style={{ verticalAlign: "-9px" }} /> {despesa.cnpjCpfFornecedor.length < 1 ? <span className="bad-warn">CPF/CNPJ ausente</span> : despesa.cnpjCpfFornecedor.length === 11 ? despesa.cnpjCpfFornecedor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4") : despesa.cnpjCpfFornecedor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')}</p>
                                 <p><DollarSign size={30} style={{ verticalAlign: "-9px" }} /> {despesa.valorLiquido ? `R$ ${despesa.valorLiquido}` : <span className="bad-warn">Valor ausente</span>}</p>
