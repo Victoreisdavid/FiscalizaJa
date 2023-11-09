@@ -84,12 +84,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
     const fornecedor = useRef(null)
 
     async function load() {
-        const numeroMeses = mesesSelecionados.map((mes) => {
-            const index = meses.findIndex((procuraMes) => {
-                return mes === procuraMes
-            })
-            return index === -1 ? null : index + 1
-        }).filter(numero => numero > -1)
+        const numeroMes = mesesSelecionados[0]
 
         const ano = anoSelecionado.current.value || null
         const cpfCnpj = fornecedor.current.value || null
@@ -97,7 +92,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
         setDespesas({ dados: [] })
         setLoading(true)
 
-        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", numeroMeses, [ano], cpfCnpj, 10).catch(() => {
+        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", numeroMes ? [Number(numeroMes)] : null, [ano], cpfCnpj, 10).catch(() => {
             return null
         })
         
@@ -140,24 +135,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
     }, [anoDespesa])
 
     function gerenciaMes(mes: string) {
-        const atual = mesesSelecionados.find((m) => m === mes)
-
-        if(atual) {
-            selecionarMes(mesesSelecionados.filter(m => m !== mes))
-        } else {
-            selecionarMes(selecionados => [...selecionados, mes])
-        }
-    }
-
-    function aplicar() {
-        const numeroMeses = mesesSelecionados.map((mes) => {
-            const index = meses.findIndex((procuraMes) => {
-                return mes === procuraMes
-            })
-            return index === -1 ? null : index
-        }).filter(numero => numero > -1)
-
-
+        selecionarMes([mes])
     }
 
     const title = `Informações de ${deputado.nomeCivil}`
@@ -217,10 +195,9 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
                     <div className={style.info_card}>
                         <h2>Opções de filtro</h2>
                         <div id={style.content}>
-                            <label htmlFor="meses">Meses: </label>
+                            <label htmlFor="meses">Mês: </label>
                             <select id="meses" onChange={(e) => { 
-                                gerenciaMes(meses[Number(e.target.value) - 1])
-                                e.target.selectedIndex = -1
+                                gerenciaMes(e.target.value)
                              }}>
                                 { meses.map((mes: string, index) => ( 
                                     <option value={index + 1} key={index} className={mesesSelecionados.find((procuraMes) => mes === procuraMes) ? `${style.selected}` : ""}>{mes}</option>
