@@ -92,19 +92,26 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
         setDespesas({ dados: [] })
         setLoading(true)
 
-        const despesas = await clientApi.obter_gastos_deputado(deputado.id, page, "ano", numeroMes ? [Number(numeroMes)] : null, [ano], cpfCnpj, 10).catch(() => {
+        const promises = []
+
+        promises.push(clientApi.obter_gastos_deputado(deputado.id, page, "ano", numeroMes ? [Number(numeroMes)] : null, [ano], cpfCnpj, 10).catch(() => {
             return null
-        })
+        }))
+        promises.push(axios.get(`/api/deputados/${deputado.id}/aprovacao`).catch((e) => {
+            return {
+                data: { dados: null }
+            }
+        }))
+
+        const resolved = await Promise.all(promises)
+
+        const despesas = resolved[0]
         
         if(!despesas) {
             document.querySelector<HTMLDivElement>(".hidden-warn").style.display = "block"
         }
 
-        const aprovacoes = await axios.get(`/api/deputados/${deputado.id}/aprovacao`).catch((e) => {
-            return {
-                data: { dados: null }
-            }
-        })
+        const aprovacoes = resolved[1]
 
         setAprovacao(aprovacoes.data.dados)
 
@@ -138,7 +145,7 @@ export default function Despesas(props: { deputado: Deputado, partido: Partido, 
         selecionarMes([mes])
     }
 
-    const title = `Informações de ${deputado.nomeCivil}`
+    const title = `Deputado federal ${deputado.ultimoStatus.nomeEleitoral || deputado.nomeCivil} | FiscalizaJá`
 
     return (
         <>

@@ -16,6 +16,12 @@ async function generateSiteMap() {
             <loc>https://www.fiscalizaja.com</loc>
             <changefreq>daily</changefreq>
         </url>
+        <url>
+            <loc>https://www.fiscalizaja.com/compare</loc>
+        </url>
+        <url>
+            <loc>https://www.fiscalizaja.com/deputados</loc>
+        </url>
         ${request.data.dados.map((dep: DeputadoResumo) => {
             return `
                 <url>

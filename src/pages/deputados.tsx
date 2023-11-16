@@ -97,6 +97,8 @@ export default function ListaDeputados(props: { deputados: DeputadoResumo[], par
             <header id={style.header}>
                 <h1>A fiscalização começa aqui.</h1>
                 <p>Faça questão <strong>cobrar quem está nessa lista</strong>. Essa é uma das maneiras de <strong>mudar o país.</strong></p>
+                <br />
+                <p><a href="/compare">Clique aqui para comparar deputados!</a></p>
             </header>
             <main id={style.main}>
                 <div id={style.search}>

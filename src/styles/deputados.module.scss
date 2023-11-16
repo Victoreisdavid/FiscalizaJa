@@ -59,6 +59,24 @@
         font-size: 1.3em;
     }
 
+    a {
+        display: block;
+        width: fit-content;
+        margin: auto;
+        margin-top: 0.5rem;
+        margin-bottom: 0.2rem;
+        text-align: center;
+        font-size: 1.05em;
+        text-decoration: none;
+        color: colors.$primary;
+
+        transition-duration: 200ms;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
     margin: 10vh auto 10vh auto;
 
     @media screen and (min-width: 800px) {

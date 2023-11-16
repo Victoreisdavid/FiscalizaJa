@@ -9,3 +9,26 @@
         color: colors.$gray;
     }
 }
+
+#global_nav {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+    background-color: transparent;
+    width: 100%;
+    padding: 12px;
+    gap: 12px;
+
+    #about {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: colors.$light;
+        background-color: colors.$primary;
+        padding: 13px 14px;
+        font-size: 1.2em;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+}

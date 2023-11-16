@@ -1,0 +1,68 @@
+@use "colors";
+
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 40;
+}
+ 
+.modal_content {
+    max-width: 520px;
+    background-color: colors.$light;
+    color: colors.$dark;
+    padding: 25px;
+    border-radius: 8px;
+    overflow-y: auto;
+    max-height: 80vh;
+
+    @media screen and (max-width: 525px) {
+        width: 95%;
+        max-width: none;
+    }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    h1 {
+        font-size: 1.4em;
+        margin: 1.1rem 0 1.1rem 0;
+    }
+
+    h2 {
+        font-size: 1.3em;
+        margin: 1.1rem 0 1.1rem 0;
+    }
+
+    li {
+        font-size: 1.1em;
+        margin: 0.7rem 0 0.7rem 0;
+    }
+
+    p {
+        font-size: 1.15em;
+    }
+}
+
+.modal_content::-webkit-scrollbar {
+    display: none;
+}
+
+.modal_button {
+    display: block;
+    background-color: colors.$primary;
+    color: colors.$light;
+    border-radius: 6px;
+    padding: 12px 16px;
+    border: none;
+    font-size: 1.2em;
+    margin: auto;
+    margin-top: 1.4rem;
+    cursor: pointer;
+}

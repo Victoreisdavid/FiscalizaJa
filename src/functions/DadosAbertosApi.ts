@@ -19,6 +19,16 @@ function getParam(url: string, param: string) {
     }
 }
 
+const translations = {
+    "DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR.": "atividade_parlamentar",
+    "TELEFONIA": "telefonia",
+    "LOCAÇÃO OU FRETAMENTO DE VEÍCULOS AUTOMOTORES": "locacao_veiculos",
+    "PASSAGEM AÉREA - SIGEPA": "passagem_sigepa",
+    "MANUTENÇÃO DE ESCRITÓRIO DE APOIO À ATIVIDADE PARLAMENTAR": "manutencao_escritorio",
+    "COMBUSTÍVEIS E LUBRIFICANTES.": "combustiveis",
+    "PASSAGEM AÉREA - REEMBOLSO": "passagem_reembolso"
+}
+
 async function delay(time: number) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -131,7 +141,7 @@ class DadosAbertosApi {
      * @param id ID do deputado
      * @param ano Ano das despesas 
      */
-    async obter_gastos_deputado_ano(id: number, ano: number): Promise<{ total: number, declarado: number, irregulares: { semComprovante: number } }> {
+    async obter_gastos_deputado_ano(id: number, ano: number): Promise<{ total: number, declarado: number, irregulares: { semComprovante: number }, tipos: any}> {
         const despesas = await this.api.get(`/deputados/${id}/despesas`, {
             params: {
                 ano,
@@ -177,6 +187,8 @@ class DadosAbertosApi {
 
         const results = await Promise.all(promises)
 
+        const tipos = {}
+
         for(const result of results) {
             for(const dado of result.data.dados) {
                 despesas.data.dados.push(dado)
@@ -184,6 +196,19 @@ class DadosAbertosApi {
         }
         
         for(const despesa of despesas.data.dados) {
+            if(!tipos[translations[despesa.tipoDespesa as keyof typeof translations]]) {
+                tipos[translations[despesa.tipoDespesa as keyof typeof translations]] = despesa.valorLiquido
+            } else {
+                tipos[translations[despesa.tipoDespesa as keyof typeof translations]] += despesa.valorLiquido
+            }
+
+            if(!despesa.urlDocumento) {
+                if(!tipos["semComprovante"]) {
+                    tipos["semComprovante"] = despesa.valorLiquido
+                } else {
+                    tipos["semComprovante"] += despesa.valorLiquido
+                }
+            }
             total += despesa.valorLiquido
         }
 
@@ -196,7 +221,8 @@ class DadosAbertosApi {
             declarado: despesas.data.dados.length,
             irregulares: {
                 semComprovante: semComprovante.length
-            }
+            },
+            tipos
         }
     }
 
