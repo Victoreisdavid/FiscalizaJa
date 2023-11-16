@@ -6,5 +6,6 @@ module.exports = {
                 hostname: "www.camara.leg.br"
             }
         ]
-    }
+    },
+    staticPageGenerationTimeout: 180
 }
