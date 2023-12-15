@@ -1,3 +1,13 @@
+# 👋 Esse repositório foi descontinuado, mas não é o fim...
+
+O FiscalizaJá recebeu uma grande atualização!
+
+Nova versão: https://fiscalizaja.com
+
+Antiga versão: https://legacy.fiscalizaja.com
+
+Novos repositórios: https://github.com/FiscalizaJa
+
 # Fiscaliza Já!
 Fiscaliza Já é um website (talvez em um futuro, um aplicativo para celular) que mostra despesas dos deputados da câmara.
 
